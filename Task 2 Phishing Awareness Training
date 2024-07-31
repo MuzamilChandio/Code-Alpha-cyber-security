@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Awareness Training</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .quiz {
+            margin: 20px 0;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .quiz h3 {
+            margin-bottom: 10px;
+        }
+        .quiz button {
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e7f3fe;
+            border: 1px solid #b3d7ff;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phishing Awareness Training</h1>
+    <h2>What is Phishing?</h2>
+    <p>
+        Phishing is a type of social engineering attack often used to steal user data, including login credentials and credit card numbers.
+    </p>
+
+    <div class="quiz">
+        <h3>Quiz: Which of these is a common feature of phishing emails?</h3>
+        <button onclick="checkAnswer('A')">A. Asking for personal information</button>
+        <button onclick="checkAnswer('B')">B. Sending congratulations messages</button>
+        <button onclick="checkAnswer('C')">C. Offering technical support</button>
+    </div>
+    <p id="result"></p>
+
+    <p onmouseover="showInfo()">Hover over this text to learn more about phishing tactics.</p>
+    <div id="info" class="info">
+        <p>Phishing tactics often involve creating a sense of urgency to make victims act quickly. Be cautious of emails that claim you must take immediate action.</p>
+    </div>
+
+    <script>
+        function checkAnswer(answer) {
+            let resultText;
+            if (answer === 'A') {
+                resultText = "Correct! Phishing emails often ask for personal information.";
+            } else {
+                resultText = "Incorrect. The correct answer is A. Phishing emails often ask for personal information.";
+            }
+            document.getElementById('result').innerText = resultText;
+        }
+
+        function showInfo() {
+            document.getElementById('info').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

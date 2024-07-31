@@ -1,0 +1,16 @@
+import json
+
+def parse_alerts(log_file):
+    with open(log_file, 'r') as file:
+        for line in file:
+            try:
+                alert = json.loads(line.strip())
+                print(f"Alert: {alert['alert']['signature']}")
+                print(f"Source IP: {alert['src_ip']} -> Destination IP: {alert['dest_ip']}")
+                print(f"Timestamp: {alert['timestamp']}\n")
+            except json.JSONDecodeError:
+                continue
+
+if __name__ == "__main__":
+    log_file_path = '/var/log/suricata/fast.log'  # Path to Suricata alert log
+    parse_alerts(log_file_path)

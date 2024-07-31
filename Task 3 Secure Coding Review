@@ -1,0 +1,65 @@
+from flask import Flask, request, render_template, redirect, url_for, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Secure this key
+
+# Database connection
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Initialize the database with a users table
+def init_db():
+    conn = get_db_connection()
+    conn.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)')
+    conn.close()
+
+# Secure route for user registration
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password)
+
+        try:
+            conn = get_db_connection()
+            conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
+            conn.commit()
+            conn.close()
+            flash('Registration successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+        except sqlite3.IntegrityError:
+            flash('Username already exists!', 'error')
+    return render_template('register.html')
+
+# Secure route for user login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+
+        if user and check_password_hash(user['password'], password):
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid credentials!', 'error')
+
+    return render_template('login.html')
+
+# Dummy dashboard for demonstration
+@app.route('/dashboard')
+def dashboard():
+    return "Welcome to your dashboard!"
+
+if __name__ == "__main__":
+    init_db()  # Initialize the database
+    app.run(debug=False)  # Disable debug mode in production

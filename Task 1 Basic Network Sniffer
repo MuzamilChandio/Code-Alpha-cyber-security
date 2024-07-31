@@ -1,0 +1,24 @@
+from scapy.all import sniff, Ether, ARP, IP, TCP, UDP
+
+def packet_handler(packet):
+    if packet.haslayer(IP):
+        ip_packet = packet[IP]
+        src_ip = ip_packet.src
+        dst_ip = ip_packet.dst
+        protocol = ip_packet.proto
+        print(f"IP Packet: {src_ip} -> {dst_ip}, Protocol: {protocol}")
+
+        if packet.haslayer(TCP):
+            tcp_packet = packet[TCP]
+            src_port = tcp_packet.sport
+            dst_port = tcp_packet.dport
+            print(f"TCP Port: {src_port} -> {dst_port}")
+
+        elif packet.haslayer(UDP):
+            udp_packet = packet[UDP]
+            src_port = udp_packet.sport
+            dst_port = udp_packet.dport
+            print(f"UDP Port: {src_port} -> {dst_port}")
+
+# Sniff network packets
+sniff(filter="ip", prn=packet_handler, count=10)
